@@ -1,3 +1,4 @@
 streamlit
 nltk
 requests
+pip install fuzzywuzzy python-Levenshtein
