@@ -1,5 +1,5 @@
 import streamlit as st
-import random
+from fuzzywuzzy import process
 
 # Predefined FAQ responses
 faq_responses = {
@@ -12,12 +12,15 @@ faq_responses = {
     "bye": "Goodbye! Have a great day! 😊"
 }
 
+# Function to get best matching response
 def chatbot_response(user_input):
     user_input = user_input.lower()
-    for key in faq_responses:
-        if key in user_input:
-            return faq_responses[key]
-    return "I'm sorry, I don't understand. Can you rephrase your question?"
+    best_match, score = process.extractOne(user_input, faq_responses.keys())
+
+    if score > 60:  # Confidence threshold
+        return faq_responses[best_match]
+    else:
+        return "I'm sorry, I don't understand. Can you rephrase your question?"
 
 # Streamlit UI
 st.title("🛎️ Customer Support Chatbot")
@@ -30,4 +33,3 @@ if st.button("Send"):
         st.write(f"🤖 Bot: {response}")
     else:
         st.write("Please enter a message.")
-
